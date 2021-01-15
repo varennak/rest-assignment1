@@ -44,18 +44,17 @@ def hello_world():
 def get_users():
     if request.method == 'GET':
         search_username = request.args.get('name')
-        if search_username:
-            subdict = {'users_list': []}
-            for user in users['users_list']:
-                if user['name'] == search_username:
-                    subdict['users_list'].append(user)
-            return subdict
+        search_job = request.args.get('job')
+        if search_username and search_job:
+            return find_user_name_job(search_username, search_job)
+        elif search_username:
+            return find_user_name(search_username)
         return users
     elif request.method == 'POST':
         userToAdd = request.get_json()
         users['users_list'].append(userToAdd)
         resp = jsonify(success=True)
-        # resp.status_code = 200
+        resp.status_code = 200
         return resp
 
 
@@ -73,8 +72,25 @@ def get_user(id):
             for user in users['users_list']:
                 if user['id'] == id:
                     users['users_list'].remove(user)
-                    resp = jsonify(success=True)
+                    resp = jsonify()
+                    resp.status_code = 204
                     return resp
-            resp = jsonify("object not found")
+            resp = jsonify("User not found with given ID")
             resp.status_code = 404
             return resp
+
+
+def find_user_name_job(name, job):
+    subdict = {'users_list': []}
+    for user in users['users_list']:
+        if user['name'] == name and user['job'] == job:
+            subdict['users_list'].append(user)
+    return subdict
+
+
+def find_user_name(name):
+    subdict = {'users_list': []}
+    for user in users['users_list']:
+        if user['name'] == name:
+            subdict['users_list'].append(user)
+    return subdict
