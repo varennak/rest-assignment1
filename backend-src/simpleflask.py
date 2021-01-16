@@ -3,6 +3,7 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 import shortuuid    # random id generator
+import json
 app = Flask(__name__)
 CORS(app)
 
@@ -58,6 +59,7 @@ def get_users():
         userToAdd['id'] = shortuuid.uuid()
         users['users_list'].append(userToAdd)
         resp = jsonify(success=True)
+        resp.data = json.dumps(userToAdd)
         resp.status_code = 201
         return resp
 
