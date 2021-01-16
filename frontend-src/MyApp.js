@@ -7,7 +7,7 @@ function MyApp() {
   const [characters, setCharacters] = useState([]);
 
   function removeOneCharacter (index) {
-    const updated = characters.filter((character, i) => {
+     const updated = characters.filter((character, i) => {
        return i !== index
     });
     setCharacters(updated);
@@ -27,7 +27,7 @@ function MyApp() {
   function updateList(person) {
     makePostCall(person).then( result => {
       if (result)
-         setCharacters([...characters, person] );
+         setCharacters([...characters, result.data] );
       });
   }
 
